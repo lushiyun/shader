@@ -1,15 +1,18 @@
 <script>
-	import { OrbitControls, Three, useFrame } from '@threlte/core';
+	import { OrbitControls, Three, useFrame, useTexture } from '@threlte/core';
 	import {
 		BufferAttribute,
+		Color,
 		Mesh,
 		PerspectiveCamera,
 		PlaneGeometry,
 		RawShaderMaterial,
 		Vector2,
 	} from 'three';
-  import fragmentShader from './shaders/fragment';
-  import vertexShader from './shaders/vertex';
+	import fragmentShader from './shaders/fragment';
+	import vertexShader from './shaders/vertex';
+
+	const texture = useTexture('./flag-french.jpg');
 
 	const material = new RawShaderMaterial({
 		vertexShader: vertexShader,
@@ -18,6 +21,8 @@
 		uniforms: {
 			uFrequency: { value: new Vector2(10, 5) },
 			uTime: { value: 0 },
+			uColor: { value: new Color('orange') },
+			uTexture: { value: texture },
 		},
 	});
 
@@ -27,7 +32,7 @@
 	const randoms = new Float32Array(count);
 	for (let i = 0; i < count; i++) {
 		randoms[i] = Math.random();
-	};
+	}
 
 	geometry.setAttribute('aRandom', new BufferAttribute(randoms, 1));
 
@@ -36,13 +41,8 @@
 	});
 </script>
 
-<Three
-	type={PerspectiveCamera}
-	makeDefault
-	position={[10, 10, 10]}
-	fov={24}
->
+<Three type={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
 	<OrbitControls />
 </Three>
 
-<Three type={Mesh} {geometry} {material} />
+<Three type={Mesh} {geometry} {material} scale.y={2 / 3} />
