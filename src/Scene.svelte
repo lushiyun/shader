@@ -18,9 +18,11 @@
 	});
 
 	const geometry = new PlaneGeometry(1, 1, 32, 32);
+
+	console.log(geometry.attributes);
 </script>
 
-<Three type={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
+<Three type={PerspectiveCamera} makeDefault position={[1, -1, 3]} fov={24}>
 	<OrbitControls />
 </Three>
 
