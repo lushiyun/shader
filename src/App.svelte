@@ -1,6 +1,7 @@
 <script>
 	import { Canvas, OrbitControls, Three } from '@threlte/core';
 	import {
+  BufferAttribute,
 		Mesh,
 		PerspectiveCamera,
 		PlaneGeometry,
@@ -12,7 +13,18 @@
 	const material = new RawShaderMaterial({
 		vertexShader: vertexShader,
 		fragmentShader: fragmentShader,
+		transparent: true,
 	});
+
+	const geometry = new PlaneGeometry(1, 1, 32, 32);
+
+	const count = geometry.attributes.position.count;
+	const randoms = new Float32Array(count);
+	for (let i = 0; i < count; i++) {
+		randoms[i] = Math.random();
+	};
+
+	geometry.setAttribute('aRandom', new BufferAttribute(randoms, 1));
 </script>
 
 <div>
@@ -26,7 +38,7 @@
 			<OrbitControls />
 		</Three>
 
-		<Three type={Mesh} geometry={new PlaneGeometry(1, 1, 32, 32)} {material} />
+		<Three type={Mesh} {geometry} {material} />
 	</Canvas>
 </div>
 
