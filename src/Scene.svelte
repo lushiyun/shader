@@ -6,7 +6,7 @@
 		Mesh,
 		PerspectiveCamera,
 		PlaneGeometry,
-		RawShaderMaterial,
+		ShaderMaterial,
 		Vector2,
 	} from 'three';
 	import fragmentShader from './shaders/fragment';
@@ -14,7 +14,7 @@
 
 	const texture = useTexture('./flag-french.jpg');
 
-	const material = new RawShaderMaterial({
+	const material = new ShaderMaterial({
 		vertexShader: vertexShader,
 		fragmentShader: fragmentShader,
 		transparent: true,
