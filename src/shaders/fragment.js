@@ -1,14 +1,15 @@
 const fragmentShader = `
-	uniform vec3 uColor;
-	uniform sampler2D uTexture;
+	uniform vec3 uDepthColor;
+	uniform vec3 uSurfaceColor;
+	uniform float uColorOffset;
+	uniform float uColorMultiplier;
 
-	varying vec2 vUv;
 	varying float vElevation;
 
 	void main() {
-		vec4 textureColor = texture2D(uTexture, vUv);
-		textureColor.rgb *= vElevation * 2.0 + 0.5;
-		gl_FragColor = textureColor;
+		float mixStrength = vElevation * uColorMultiplier + uColorOffset;
+		vec3 color = mix(uDepthColor, uSurfaceColor, mixStrength);
+		gl_FragColor = vec4(color, 1.0);
 	}
 `;
 

@@ -1,40 +1,42 @@
 <script>
-	import { OrbitControls, Three, useFrame, useTexture } from '@threlte/core';
+	import { OrbitControls, Three, useFrame } from '@threlte/core';
 	import {
-		BufferAttribute,
 		Color,
+		DoubleSide,
 		Mesh,
 		PerspectiveCamera,
 		PlaneGeometry,
 		ShaderMaterial,
 		Vector2,
 	} from 'three';
+	import { degToRad } from 'three/src/math/MathUtils';
 	import fragmentShader from './shaders/fragment';
 	import vertexShader from './shaders/vertex';
-
-	const texture = useTexture('./flag-french.jpg');
 
 	const material = new ShaderMaterial({
 		vertexShader: vertexShader,
 		fragmentShader: fragmentShader,
-		transparent: true,
+		side: DoubleSide,
 		uniforms: {
-			uFrequency: { value: new Vector2(10, 5) },
 			uTime: { value: 0 },
-			uColor: { value: new Color('orange') },
-			uTexture: { value: texture },
+
+			uBigWavesElevation: { value: 0.2 },
+			uBigWavesFrequency: { value: new Vector2(4.0, 1.0) },
+			uBigWavesSpeed: { value: 0.75 },
+
+			uSmallWavesElevation: { value: 0.15 },
+			uSmallWavesFrequency: { value: 3.0 },
+			uSmallWavesSpeed: { value: 0.2 },
+			uSmallWavesIteration: { value: 4.0 },
+
+			uDepthColor: { value: new Color('#186691') },
+			uSurfaceColor: { value: new Color('#9bd8ff') },
+			uColorOffset: { value: 0.08 },
+			uColorMultiplier: { value: 5.0 },
 		},
 	});
 
-	const geometry = new PlaneGeometry(1, 1, 32, 32);
-
-	const count = geometry.attributes.position.count;
-	const randoms = new Float32Array(count);
-	for (let i = 0; i < count; i++) {
-		randoms[i] = Math.random();
-	}
-
-	geometry.setAttribute('aRandom', new BufferAttribute(randoms, 1));
+	const geometry = new PlaneGeometry(2, 2, 128, 128);
 
 	useFrame(({ clock }) => {
 		material.uniforms.uTime.value = clock.getElapsedTime();
@@ -45,4 +47,4 @@
 	<OrbitControls />
 </Three>
 
-<Three type={Mesh} {geometry} {material} scale.y={2 / 3} />
+<Three type={Mesh} {geometry} {material} rotation.x={degToRad(90)} />
